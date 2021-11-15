@@ -1,0 +1,3 @@
+class FavoriteSeason < ApplicationRecord
+    
+end

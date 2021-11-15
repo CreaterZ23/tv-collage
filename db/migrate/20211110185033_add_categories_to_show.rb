@@ -1,8 +1,9 @@
 class AddCategoriesToShow < ActiveRecord::Migration[6.1]
   def change
-    add_column :shows, :seasons, :string, array: true, default: []
-    add_column :shows, :episodes, :string, array: true, default: []
-    add_column :shows, :cast, :string, array: true, default: []
-    add_column :shows, :genre, :string, array: true, default: []
+    enable_extension "hstore"
+    add_column :shows, :seasons, :hstore
+    add_column :shows, :episodes, :hstore
+    add_column :shows, :cast, :hstore
+    add_column :shows, :genre, :hstore
   end
 end

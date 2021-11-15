@@ -24,6 +24,14 @@ export default function CollagePage (){
             fetchInfo(data)
         })
     },[id])
+
+    // useEffect(() => {
+    //     fetch(`/favorite_seasons/${id}`)
+    //     .then(resp => resp.json())
+    //     .then(data => {
+    //         console.log(data);
+    //     })
+    // })
     
 
 
@@ -52,37 +60,46 @@ export default function CollagePage (){
         })
         
     }
+
+
     function handleSubmitCast(e){
         e.preventDefault()
         // console.log(casts)
         // console.log(casts.find(cast => cast.character.name.toLowerCase() === favCastMember.toLowerCase()))
         setSingleCastMember(casts.find(cast => cast.character.name.toLowerCase() === favCastMember.toLowerCase()))
         console.log(singleCastMember)
-       
-        let show_object = {
-            name: singleCastMember.character.name,
-            image: singleCastMember.character.image.medium,
-            actor: singleCastMember.person.name,
+        
+        let castObj = (singleCastMember ?{ 
+            cast: {
+            // show_id: id,
+            character_name: singleCastMember.character.name,
+            character_image: (singleCastMember.character.image ? singleCastMember.character.image.medium : null),
+            actor_name: singleCastMember.person.name,
             actor_image: singleCastMember.person.image.medium,
-            gender: singleCastMember.person.gender    
-         }
+            actor_gender: singleCastMember.person.gender
+            }    
+            } : null)
+
+        console.log(castObj)
+        debugger;
         setFavCastMember('')
-        handleFavCastMemberPost(show_object)
+        handleFavCastMemberPost(castObj)
     }
     // console.log(casts[0].character.name, favCastMember)
 
-    function handleFavCastMemberPost(show_object) {
+    function handleFavCastMemberPost(castObj) {
         // debugger;
         
-        fetch(`/shows/${id}`, {
-            method: 'PATCH',
+        fetch(`/shows/${id}/update_cast`, {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify(show_object)
+            body: JSON.stringify(castObj)
         })
             .then(resp => resp.json())
             .then(data=> {
                 console.log(data)
             })
+            
     }
 
     function handleSubmitSeason(e){
@@ -90,18 +107,63 @@ export default function CollagePage (){
         // console.log(seasons)
         // console.log(seasons.find(season => season.number === parseInt(favSeason)))
         setSingleSeason(seasons.find(season => season.number === parseInt(favSeason)))
+        
+        let favSeasonObj = (singleSeason ? {
+            seasons: {
+            show_id: id,
+            episode_order: singleSeason.episodeOrder, 
+            end_date: singleSeason.endDate, 
+            premiere_data: singleSeason.premiereDate, 
+            season_image: singleSeason.image, 
+            summary: singleSeason.summary
+        }
+        } : null )
         setFavSeason('')
+        handleFavSeasonPost(favSeasonObj)
+    }
+    
+    function handleFavSeasonPost(favSeasonObj){
+        fetch(`/shows/${id}/update_season`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(favSeasonObj)
+        })
+            .then(resp => resp.json())
+            .then(data=> {
+                console.log(data)
+            })
     }
     
     function handleSubmitEpisode(e){
         e.preventDefault()
         // console.log(episodes)
         setSingleEpisode(episodes.find(episode => episode.number === parseInt(favEpisode) && episode.season === parseInt(favEpiSeason)))
+        
+        let episodeObj = (singleEpisode ? {
+            episodes: {
+                airdate: singleEpisode.airdate,
+                image: (singleEpisode.image ? singleEpisode.image.medium : null),
+                number: singleEpisode.number,
+                name: singleEpisode.name
+
+            }
+        } : null)
         setFavEpisode('')
+        setFavEpiSeason('')
+        handleFavEpisodePut(episodeObj)
     }
 
-
-    
+    function handleFavEpisodePut(episodeObj){
+        fetch(`/shows/${id}/update_episode`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(episodeObj)
+        })
+            .then(resp => resp.json())
+            .then(data=> {
+                console.log(data)
+            })
+    }
 
     return(
     <div>

@@ -10,7 +10,7 @@ export default function ShowCard({ show, currentUser }){
 
         const eachGenre = genre.map(singleGenre => (<span>{singleGenre}</span>))
 
-        const rend = summary.toString()
+        // const rend = summary.toString()
         
         function handleSave(currentUser) {
             console.log(currentUser)

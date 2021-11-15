@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :favorite_seasons
   resources :reviews
   resources :shows
   resources :users 
@@ -9,7 +10,11 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   get "/hello", to: "application#hello_world"
 
-  patch '/update_cast', to: 'shows#update_cast'
+  put '/shows/:id/update_cast', to: 'shows#update_cast'
+
+  put '/shows/:id/update_season', to: 'shows#update_season'
+
+  put '/shows/:id/update_episode', to: 'shows#update_episode'
 
   get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
 end

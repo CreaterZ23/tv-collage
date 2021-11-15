@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_10_185033) do
+ActiveRecord::Schema.define(version: 2021_11_15_161220) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
   enable_extension "plpgsql"
+
+  create_table "favorite_seasons", force: :cascade do |t|
+    t.integer "show_id"
+    t.integer "episode_order"
+    t.string "end_date"
+    t.string "premiere_data"
+    t.string "season_image"
+    t.string "summary"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "reviews", force: :cascade do |t|
     t.string "comment"
@@ -37,10 +49,10 @@ ActiveRecord::Schema.define(version: 2021_11_10_185033) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "seasons", default: [], array: true
-    t.string "episodes", default: [], array: true
-    t.string "cast", default: [], array: true
-    t.string "genre", default: [], array: true
+    t.hstore "seasons"
+    t.hstore "episodes"
+    t.hstore "cast"
+    t.hstore "genre"
     t.index ["user_id"], name: "index_shows_on_user_id"
   end
 
