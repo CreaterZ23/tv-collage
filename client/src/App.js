@@ -1,29 +1,48 @@
+// client/src/components/App.js
 import './App.css';
 import { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+// import { BrowserRouter as Router , Switch, Route } from "react-router-dom";
+import AuthenticatedApp from './accessed-app/AuthenticatedApp';
+import UnAuthenticatedApp from './login-folder/UnAuthenticatedApp'
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [currentUser, setCurrentUser] = useState(null)
+  const [authChecked, setAuthChecked] = useState(false)
+  const [rerender, setRerender] = useState(false)
 
   useEffect(() => {
-    fetch("/hello")
-      .then((r) => r.json())
-      .then((data) => setCount(data.count));
-  }, []);
+    fetch('/auth', {
+      credentials: 'include'
+    })
+      .then(res => {
+        if (res.ok) {
+          res.json().then((user) => {
+            setCurrentUser(user)
+            setAuthChecked(true)
+          })
+        } else {
+          setAuthChecked(true)
+        }
+      })
+  }, [rerender])
 
+  if (!authChecked) { return <div></div> }
   return (
-    <BrowserRouter>
-      <div className="App">
-        <Switch>
-          <Route path="/testing">
-            <h1>Test Route</h1>
-          </Route>
-          <Route path="/">
-            <h1>Page Count: {count}</h1>
-          </Route>
-        </Switch>
-      </div>
-    </BrowserRouter>
+    <div className="container">
+      {currentUser ? (
+        <AuthenticatedApp
+          setCurrentUser={setCurrentUser}
+          currentUser={currentUser}
+          rerender={rerender}
+          setRerender={setRerender}
+        />
+      ) : (
+        <UnAuthenticatedApp
+          setCurrentUser={setCurrentUser}
+        />
+      )
+      }
+    </div>
   );
 }
 
