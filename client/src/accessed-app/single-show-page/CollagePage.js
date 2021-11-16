@@ -1,6 +1,7 @@
 import React, { useState, useEffect }from 'react';
 import { useParams } from 'react-router-dom'
 import SavedShowFetch from './SavedShowFetch'
+import parse from 'html-react-parser';
 
 export default function CollagePage (){
     const [singleShow, setSingleShow] = useState([])
@@ -25,13 +26,9 @@ export default function CollagePage (){
         })
     },[id])
 
-    // useEffect(() => {
-    //     fetch(`/favorite_seasons/${id}`)
-    //     .then(resp => resp.json())
-    //     .then(data => {
-    //         console.log(data);
-    //     })
-    // })
+    
+
+
     
 
 
@@ -114,8 +111,9 @@ export default function CollagePage (){
             episode_order: singleSeason.episodeOrder, 
             end_date: singleSeason.endDate, 
             premiere_data: singleSeason.premiereDate, 
-            season_image: singleSeason.image, 
-            summary: singleSeason.summary
+            season_image: (singleSeason.image ? singleSeason.image.medium : null), 
+            summary: singleSeason.summary,
+            name: singleSeason.name
         }
         } : null )
         setFavSeason('')
@@ -144,7 +142,9 @@ export default function CollagePage (){
                 airdate: singleEpisode.airdate,
                 image: (singleEpisode.image ? singleEpisode.image.medium : null),
                 number: singleEpisode.number,
-                name: singleEpisode.name
+                name: singleEpisode.name,
+                season: singleEpisode.season
+            
 
             }
         } : null)
@@ -167,8 +167,9 @@ export default function CollagePage (){
 
     return(
     <div>
-        <SavedShowFetch singleShow={singleShow}/>
+        <SavedShowFetch />
         <h2>{singleShow.name}</h2>
+        <img src={singleShow.image} alt='img not provided' />
         <div>
         <form onSubmit={handleSubmitCast}>
             <label>Select your favorite Cast member
@@ -190,7 +191,7 @@ export default function CollagePage (){
             <button type="submit">Submit your favorite Season</button>
         </form>
         </div>
-        {singleSeason ? (
+        {/* {singleSeason ? (
         <div>
             <h3>{singleSeason.endDate}</h3>
         </div>) : null}
@@ -203,7 +204,40 @@ export default function CollagePage (){
         <div>
             <h3>{singleEpisode.name}</h3>
         </div>    
-        ) : null}
+        ) : null} */}
+        {singleShow.cast ? 
+        <div>
+            <span>{singleShow.cast.character_name}</span>
+            <img src={singleShow.cast.character_image} alt='not provided'/>
+            <span>{singleShow.cast.actor_name}</span>
+            <img src={singleShow.cast.actor_image} alt='not provided'/>
+            <span>{singleShow.cast.actor_gender}</span>
+        </div> : null}
+        {singleShow.episodes ? <div>
+            <h2>{singleShow.episodes.name}</h2>
+            <h3>Favorite episode: {singleShow.episodes.number} of season: {singleShow.episodes.season}</h3>
+            <img src={singleShow.episodes.image} alt='not provided'/>
+            <span>{singleShow.episodes.airdate}</span>
+        </div> : null}
+        {singleShow.seasons ? <div>
+            <span>{singleShow.seasons.name}</span>
+            <img src={singleShow.seasons.image} alt='not provided'/>
+            <span>Number of episodes: {singleShow.seasons.episode_order}</span>
+            <span>Premiere date: {singleShow.seasons.premiere_data}</span>
+            <span>End date: {singleShow.seasons.endDate}</span>
+            {singleShow.seasons.summary ? <p>Summary of the season: {parse(singleShow.seasons.summary.toString())}</p> : null}
+        </div> : null}
     </div>
     )
 }
+
+
+// seasons: {
+//     show_id: id,
+//     episode_order: singleSeason.episodeOrder, 
+//     end_date: singleSeason.endDate, 
+//     premiere_data: singleSeason.premiereDate, 
+//     season_image: (singleSeason.image ? singleSeason.image.medium : null), 
+//     summary: singleSeason.summary,
+//     name: singleSeason.name
+// }

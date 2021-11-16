@@ -80,3 +80,15 @@ Note: Beware of modifying this element as it can break the animations - you shou
   font-family: Didot, serif;
 } 
 
+div.header {
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+}
+
+body {
+  background-image: url('https://images.pexels.com/photos/4842487/pexels-photo-4842487.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500');
+}
+

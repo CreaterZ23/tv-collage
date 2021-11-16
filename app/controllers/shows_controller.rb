@@ -16,6 +16,11 @@ class ShowsController < ApplicationController
         render json: one_show, status: :ok 
     end
 
+    def destroy
+        one_show = Show.find(params[:id])
+        one_show.destroy
+    end
+
     def update_cast
         # byebug
 
@@ -49,7 +54,7 @@ private
     # end
 
     def show_params
-        params.permit(:name, :image, :rating, :summary, :network, :official_site, :seasons, :episodes, :cast, :genre, :runtime, :premiered, :ended, :user_id, :show_id)
+        params.permit(:name, :image, :rating, :summary, :network, :official_site, :seasons, :episodes, :cast, :genre, :runtime, :premiered, :ended, :user_id, :show_id, :seasons, :episodes, :cast)
     end
 
     def no_show_found

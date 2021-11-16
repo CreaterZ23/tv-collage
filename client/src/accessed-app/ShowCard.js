@@ -10,8 +10,8 @@ export default function ShowCard({ show, currentUser }){
 
         const eachGenre = genre.map(singleGenre => (<span>{singleGenre}</span>))
 
-        // const rend = summary.toString()
-        
+        let rend = (summary ? summary.toString() : console.log("loading"))
+        console.log(typeof(rend))
         function handleSave(currentUser) {
             console.log(currentUser)
             // debugger
@@ -48,7 +48,7 @@ export default function ShowCard({ show, currentUser }){
             <div>{eachGenre}</div>
             <a href={official_site}>{official_site}</a>
             <span>Rating: {rating}</span>
-            <div>{parse(summary)}</div>
+            {summary ? <div>{parse(rend)}</div> : null}
             <span>Runtime: {runtime} </span>
             <span>Premiere Date: {premiered} </span>
             <span>Conculsion Date {ended}</span>

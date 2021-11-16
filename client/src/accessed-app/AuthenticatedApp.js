@@ -28,7 +28,7 @@ function AuthenticatedApp({ currentUser, rerender, setRerender }) {
         <div>
             <Header/>
             <Navbar handleLogout={handleLogout}/>
-            
+            <body>
 
             <Switch>
                 <Route exact path="/home">
@@ -41,7 +41,7 @@ function AuthenticatedApp({ currentUser, rerender, setRerender }) {
                     <CollagePage />
                 </Route>
             </Switch>
-            
+            </body>
         </div>
     )
 }

@@ -3,7 +3,7 @@ import SavedShowCard from './SavedShowCard'
 
 export default function Home (){
         const [savedShows, setSavedShows] =useState([])
-        
+        const [refresh, setRefresh] = useState(false)
         useEffect(() =>{
             fetch(`/shows`)
             .then(resp => resp.json())
@@ -12,13 +12,15 @@ export default function Home (){
                 setSavedShows(data)
             })
 
-        },[])
+        },[refresh])
         savedShows.map(savedShow=> console.log(savedShow))
 
         const eachSavedShow = savedShows ? (savedShows.map(savedShow => (
             <SavedShowCard
             key={savedShow.id}
             show={savedShow}
+            refresh={refresh}
+            setRefresh={setRefresh}
             />
             ))) : null
 
